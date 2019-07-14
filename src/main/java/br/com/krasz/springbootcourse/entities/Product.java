@@ -8,21 +8,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-@Entity(name = "categories")
-public class Category implements Serializable {
+@Entity(name = "products")
+public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    private Double price;
     
-    @ManyToMany(mappedBy = "categories")
-    private List<Product> products = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "products_categories",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories = new ArrayList<>();
 
-    public Category() {
+    public Product() {
     }
 
     public int getId() {
@@ -41,12 +48,20 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public Double getPrice() {
+        return price;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     @Override
@@ -65,7 +80,7 @@ public class Category implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Category other = (Category) obj;
+        Product other = (Product) obj;
         if (id != other.id)
             return false;
         return true;
