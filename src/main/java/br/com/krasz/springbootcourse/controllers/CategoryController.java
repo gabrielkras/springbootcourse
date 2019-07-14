@@ -19,6 +19,7 @@ public class CategoryController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
+        
         Category cat = service.getCategoryById(id);
 
         return ResponseEntity.ok().body(cat);
